@@ -33,6 +33,8 @@ jobs:
           components: rustfmt, clippy
           targets: wasm32-unknown-unknown
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          cache-on-failure: true
       - name: Check formatting
         run: cargo fmt --all -- --check
       - name: Test RAW development
@@ -46,7 +48,7 @@ jobs:
         run: cargo test --locked -p photocraft-ui-egui --lib camera_raw
       - name: Test Italian menu and capture preview
         env:
-          PHOTOCRAFT_BALANCE_SNAPSHOT_DIR: balance-preview
+          PHOTOCRAFT_BALANCE_SNAPSHOT_DIR: ${{ github.workspace }}/balance-preview
         run: cargo test --locked -p photocraft-ui-egui --test it raw_balance_menu_in_italian
       - name: Check changed crates with Clippy
         run: cargo clippy --locked -p photocraft-raw -p photocraft-io -p photocraft-ui-egui --all-targets -- -D warnings
